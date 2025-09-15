@@ -40,6 +40,9 @@ namespace Inventory
 
         private void button1_Click(object sender, EventArgs e)
         {
+
+
+
             try
             {
                 _ProductName = Product_Name(txtProductName.Text);
@@ -54,10 +57,19 @@ namespace Inventory
                 gridViewProductList.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                 gridViewProductList.DataSource = showProductList;
             }
-            catch () 
+            catch (NumberFormatException ex)
             {
-
+                MessageBox.Show("Format Error" + ex.Message);
             }
+            catch (StringFormatException ex)
+            {
+                MessageBox.Show("Format Error" + ex.Message);
+            }
+            catch (CurrencyFormatException ex)
+            {
+                MessageBox.Show("Format Error" + ex.Message);
+            }
+        }
 
                     class NumberFormatException : Exception
         {
@@ -81,19 +93,19 @@ namespace Inventory
         public string Product_Name(string name)
         {
             if (!Regex.IsMatch(name, @"^[a-zA-Z]+$"))
-                throw new Exception("");
+                throw new StringFormatException("");
             return name;
         }
         public int Quantity(string qty)
         {
             if (!Regex.IsMatch(qty, @"^[0-9]"))
-                throw new Exception("");
+                throw new NumberFormatException("");
             return Convert.ToInt32(qty);
         }
         public double SellingPrice(string price)
         {
             if (!Regex.IsMatch(price.ToString(), @"^(\d*\.)?\d+$"))
-                throw new Exception("");
+                throw new CurrencyFormatException("");
                 return Convert.ToDouble(price);
         }
         BindingSource showProductList = new BindingSource();
